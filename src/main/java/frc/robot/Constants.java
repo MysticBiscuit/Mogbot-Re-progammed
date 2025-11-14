@@ -56,6 +56,9 @@ public final class Constants {
     public static final int kFrontRightTurningCanId = 4;
     public static final int kRearRightTurningCanId = 8;
 
+    public static final int kArmMoverCanId = 9;
+    public static final int kArmSpinnerCanId = 10;
+    public static final int kClimbingMechanismCanId = 11;
     public static final int kGyroId = 0;
 
     public static final boolean kGyroReversed = false;
@@ -81,6 +84,8 @@ public final class Constants {
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
     public static final double kDriveDeadband = 0.05;
+    public static final int kArmLimitSwitchPort = 0;
+    public static final int kClimberLimitSwitchPort = 1;
   }
 
   public static final class AutoConstants {
