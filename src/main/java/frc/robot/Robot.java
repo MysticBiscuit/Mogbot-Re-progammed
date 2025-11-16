@@ -101,9 +101,9 @@ private XboxController m_controller = new XboxController(Constants.OIConstants.k
   @Override
   public void teleopPeriodic() {
 
-    if(m_controller.getLeftBumper() && m_armLimitSwitch.get()) {
+    if(m_controller.getLeftBumperButton() && m_armLimitSwitch.get()) {
       m_armMover.set(-0.1);
-    } else if(m_controller.getRightBumper()){
+    } else if(m_controller.getRightBumperButton()){
       m_armMover.set(0.1);
     } else {
       m_armMover.set(0);
