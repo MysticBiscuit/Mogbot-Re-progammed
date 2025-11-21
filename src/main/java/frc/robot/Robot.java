@@ -106,7 +106,7 @@ private XboxController m_controller = new XboxController(Constants.OIConstants.k
     } else if(m_controller.getRightBumperButton()){
       m_armMover.set(0.1);
     } else {
-      m_armMover.set(0);
+      m_armMover.set(.02);
     }
 
     if (m_controller.getRightTriggerAxis() >= 0.5) {
@@ -119,7 +119,7 @@ private XboxController m_controller = new XboxController(Constants.OIConstants.k
       m_spinner.set(-0.25);
     }
 
-    if (m_controller.getYButton() && !m_climberLimitSwitch.get()) {
+    if (m_controller.getYButton() && m_climberLimitSwitch.get()) {
       m_climber.set(0.2);
     } else {
       m_climber.set(0);
