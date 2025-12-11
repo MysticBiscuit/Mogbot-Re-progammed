@@ -18,8 +18,10 @@ import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.subsystems.Coms;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -34,6 +36,10 @@ import java.util.List;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+
+  public Trajectory currentTrajectory;
+  
+  
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -74,13 +80,42 @@ public class RobotContainer {
             m_robotDrive));
   }
 
+  //Is the actual code for Auto 1
+  private Command moveForward(){
+
+  }
+  
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+   
+    // Create a voltage constraint to ensure we don't accelerate too fast
+    TrajectoryConfig config = new TrajectoryConfig(
+      AutoConstants.kMaxSpeedMetersPerSecond,
+      AutoConstants.kMaxAccelerationMetersPerSecondSquared
+    )
+    .setKinematics(DriveConstants.kDriveKinematics)
+    .setStartVelocity(0)
+    .setEndVelocity(0);
+
+    //actual auto command/diff autos based on selection
+     String[] choices = Coms.getAutoChoices();
+    
+    Command autoCommand = Commands.none();
+
+    if (choices[0] == "AUTO 1"){
+        autoCommand = moveForward();
+    } else {
+        return Commands.none();
+    }
+
+        return autoCommand;
+
     // Create config for trajectory
+    /**
     TrajectoryConfig config = new TrajectoryConfig(
         AutoConstants.kMaxSpeedMetersPerSecond,
         AutoConstants.kMaxAccelerationMetersPerSecondSquared)
@@ -117,6 +152,43 @@ public class RobotContainer {
     m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
 
     // Run path following command, then stop at the end.
-    return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false));
+    return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false)); */
   }
+
+  private Command generateTrajectoryCommand(Pose2d start, Pose2d end, List<Translation2d> waypoints, TrajectoryConfig config) {
+    currentTrajectory = TrajectoryGenerator.generateTrajectory(
+        start,
+        waypoints,
+        end,
+        config
+    );
+
+    var thetaController = new ProfiledPIDController(
+        AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
+    thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+    Command swerveCommand = new SwerveControllerCommand(
+        currentTrajectory,
+        robotStartPose,
+        DriveConstants.kDriveKinematics,
+        new PIDController(AutoConstants.kPXController, 0, 0),
+        new PIDController(AutoConstants.kPYController, 0, 0),
+        thetaController,
+        m_robotDrive::setModuleStates,
+        m_robotDrive)  {
+     
+        @Override
+        public void execute() {
+            super.execute();
+        }
+   };
+
+    return swerveCommand
+    .andThen(
+      Commands.runOnce(
+        () -> m_robotDrive.drive(0, 0, 0, false)
+      )
+    );
+  }
+
 }
