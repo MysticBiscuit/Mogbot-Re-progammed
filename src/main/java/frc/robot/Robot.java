@@ -124,6 +124,11 @@ private XboxController m_controller = new XboxController(Constants.OIConstants.k
     } else {
       m_climber.set(0);
     }
+    if (m_controller.getAButton() && m_climberLimitSwitch.get()) {
+      m_climber.set(-0.2);
+    } else {
+      m_climber.set(0);
+    }
   }
 
   @Override
