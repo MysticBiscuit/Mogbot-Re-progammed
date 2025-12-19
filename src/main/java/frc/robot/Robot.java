@@ -79,6 +79,8 @@ private XboxController m_controller = new XboxController(Constants.OIConstants.k
     
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
+    // m_autoSelected = m_chooser.getSelected(); 
+
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",
      * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
@@ -89,12 +91,22 @@ private XboxController m_controller = new XboxController(Constants.OIConstants.k
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
-    }
+    } 
   }
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+  /*
+   * switch(m_autoSelected) {
+   *  case kCustomAuto {
+   *  auto code here
+   * break;
+   * }
+   * case...
+   * }
+   */
+  }
 
   @Override
   public void teleopInit() {
@@ -131,6 +143,11 @@ private XboxController m_controller = new XboxController(Constants.OIConstants.k
 
     if (m_controller.getYButton() && m_climberLimitSwitch.get()) {
       m_climber.set(0.2);
+    } else {
+      m_climber.set(0);
+    }
+    if (m_controller.getAButton() && m_climberLimitSwitch.get()) {
+      m_climber.set(-0.2);
     } else {
       m_climber.set(0);
     }
