@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.Coms;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -36,6 +37,8 @@ private XboxController m_controller = new XboxController(Constants.OIConstants.k
    */
   @Override
   public void robotInit() {
+    //pulls up and configures Smart Dashboard
+    Coms.configureSendableChooser();
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
@@ -118,7 +121,7 @@ private XboxController m_controller = new XboxController(Constants.OIConstants.k
     } else if(m_controller.getRightBumperButton()){
       m_armMover.set(0.1);
     } else {
-      m_armMover.set(.02);
+      m_armMover.set(-.02);
     }
 
     if (m_controller.getRightTriggerAxis() >= 0.5) {
