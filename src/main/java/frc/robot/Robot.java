@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.Coms;
 
+import edu.wpi.first.wpilibj.Timer;
+
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -22,6 +24,8 @@ import frc.robot.subsystems.Coms;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
+
+  private final Timer m_systemTimer = new Timer();
 
   private RobotContainer m_robotContainer;
 private XboxController m_controller = new XboxController(Constants.OIConstants.kDriverControllerPort);
@@ -70,6 +74,9 @@ private XboxController m_controller = new XboxController(Constants.OIConstants.k
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    m_systemTimer.reset();
+    m_systemTimer.start();
+    
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     /*

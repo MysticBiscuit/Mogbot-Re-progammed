@@ -15,17 +15,22 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.Coms;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.Robot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
+
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -36,6 +41,10 @@ import java.util.List;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+
+ private SparkMax m_spinner = new SparkMax(Constants.DriveConstants.kArmSpinnerCanId, MotorType.kBrushless);
+ 
+  private final Timer m_systemTimer = new Timer();
 
   public Trajectory currentTrajectory;
   
@@ -81,7 +90,7 @@ public class RobotContainer {
   }
 
   //Is the actual code for Auto 1
-  private Command moveForward(){
+  private Command getmoveForward(){
 
 TrajectoryConfig config = new TrajectoryConfig(
       AutoConstants.kMaxSpeedMetersPerSecond,
@@ -123,6 +132,19 @@ TrajectoryConfig config = new TrajectoryConfig(
     return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false));
   }
   
+  private Command getWheelSpinnerAutoCommand(){
+     boolean getAutoTimerCount;
+    if (m_systemTimer.get() > 30){
+      getAutoTimerCount = true;
+    } else {getAutoTimerCount = false;}
+
+    return Commands.sequence(
+      Commands.run(() -> m_spinner.set(.25))
+        .until(() -> getAutoTimerCount)
+    )
+    .withTimeout(35);
+  }
+  
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
@@ -145,8 +167,9 @@ TrajectoryConfig config = new TrajectoryConfig(
     Command autoCommand = Commands.none();
 
     if (choices[0] == "AUTO 1"){
-        autoCommand = moveForward();
-    } else {
+        autoCommand = getmoveForward()
+        .andThen(getWheelSpinnerAutoCommand());
+      } else {
         return Commands.none();
     }
 
