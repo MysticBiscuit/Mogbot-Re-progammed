@@ -106,7 +106,7 @@ private XboxController m_controller = new XboxController(Constants.OIConstants.k
     } else if(m_controller.getRightBumperButton()){
       m_armMover.set(0.1);
     } else {
-      m_armMover.set(.02);
+      m_armMover.set(-.02);
     }
 
     if (m_controller.getRightTriggerAxis() >= 0.5) {
