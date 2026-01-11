@@ -23,8 +23,11 @@ import frc.robot.subsystems.Coms;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
 
@@ -124,37 +127,26 @@ TrajectoryConfig config = new TrajectoryConfig(
     return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false));
   }
 
- public Command limelightTestAuto(){
+  // Code for Limelight Test Autonomous
+    public Command limelightTestAuto(){
+    
+ // Basic targeting data
+double tx = LimelightHelpers.getTX("");  // Horizontal offset from crosshair to target in degrees
+double ta = LimelightHelpers.getTA("");  // Target area (0% to 100% of image)
+boolean hasTarget = LimelightHelpers.getTV(""); // Do you have a valid target? 
 
-    // Basic targeting data
-// double tx = LimelightHelpers.getTX("");  // Horizontal offset from crosshair to target in degrees
-// double ty = LimelightHelpers.getTY("");  // Vertical offset from crosshair to target in degrees
-// double ta = LimelightHelpers.getTA("");  // Target area (0% to 100% of image)
-// boolean hasTarget = LimelightHelpers.getTV(""); // Do you have a valid target?
+if (hasTarget){
+ // Rotate toward the April Tag
+        return new SequentialCommandGroup(
+            new InstantCommand(() -> m_robotDrive.drive(0, 0, tx * 0.1, false)), // Rotate toward target
+            new WaitCommand(1), // Wait for 1 second
+            new InstantCommand(() -> m_robotDrive.drive(0, 0, 0, false)) // Stop the robot
+        );
+    } else {
+            return new InstantCommand(() -> m_robotDrive.drive(0, 0, 0, false));
+    }
+ }
 
-// double txnc = LimelightHelpers.getTXNC("");  // Horizontal offset from principal pixel/point to target in degrees
-// double tync = LimelightHelpers.getTYNC("");  // Vertical  offset from principal pixel/point to target in degrees
-
-// LimelightHelpers.setPipelineIndex("", 0); // pipelines are instantly-swappable programs that change how Limelight processes images
-
-    // Control LEDs
-// Let the current pipeline control the LEDs
-// LimelightHelpers.setLEDMode_PipelineControl("");
-// Force LEDs on/off/blink
-// LimelightHelpers.setLEDMode_ForceOn("");
-// LimelightHelpers.setLEDMode_ForceOff("");
-// LimelightHelpers.setLEDMode_ForceBlink("");
-
-
-// TO DO: make this auto rotate to face april tag, and drive to it to make it a certain distance away.  
-// if (hasTarget == true){
-// turn twards target
-// drive twards target until x distance away
-//    } else {
-//      wait();
-//    }
-}
-  
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

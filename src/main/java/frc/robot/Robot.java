@@ -90,7 +90,7 @@ private XboxController m_controller = new XboxController(Constants.OIConstants.k
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-  /*
+  /* 
    * switch(m_autoSelected) {
    *  case kCustomAuto {
    *  auto code here
@@ -98,7 +98,7 @@ private XboxController m_controller = new XboxController(Constants.OIConstants.k
    * }
    * case...
    * }
-   */
+   */ 
   }
 
   @Override
