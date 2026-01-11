@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -122,6 +123,37 @@ TrajectoryConfig config = new TrajectoryConfig(
     // Run path following command, then stop at the end.
     return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false));
   }
+
+ public Command limelightTestAuto(){
+
+    // Basic targeting data
+// double tx = LimelightHelpers.getTX("");  // Horizontal offset from crosshair to target in degrees
+// double ty = LimelightHelpers.getTY("");  // Vertical offset from crosshair to target in degrees
+// double ta = LimelightHelpers.getTA("");  // Target area (0% to 100% of image)
+// boolean hasTarget = LimelightHelpers.getTV(""); // Do you have a valid target?
+
+// double txnc = LimelightHelpers.getTXNC("");  // Horizontal offset from principal pixel/point to target in degrees
+// double tync = LimelightHelpers.getTYNC("");  // Vertical  offset from principal pixel/point to target in degrees
+
+// LimelightHelpers.setPipelineIndex("", 0); // pipelines are instantly-swappable programs that change how Limelight processes images
+
+    // Control LEDs
+// Let the current pipeline control the LEDs
+// LimelightHelpers.setLEDMode_PipelineControl("");
+// Force LEDs on/off/blink
+// LimelightHelpers.setLEDMode_ForceOn("");
+// LimelightHelpers.setLEDMode_ForceOff("");
+// LimelightHelpers.setLEDMode_ForceBlink("");
+
+
+// TO DO: make this auto rotate to face april tag, and drive to it to make it a certain distance away.  
+// if (hasTarget == true){
+// turn twards target
+// drive twards target until x distance away
+//    } else {
+//      wait();
+//    }
+}
   
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -146,6 +178,8 @@ TrajectoryConfig config = new TrajectoryConfig(
 
     if (choices[0] == "AUTO 1"){
         autoCommand = moveForward();
+    } else if (choices[0] == "LIMELIGHT AUTO"){
+        autoCommand = limelightTestAuto();
     } else {
         return Commands.none();
     }
