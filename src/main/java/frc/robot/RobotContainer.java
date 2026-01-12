@@ -127,25 +127,18 @@ TrajectoryConfig config = new TrajectoryConfig(
     return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false));
   }
 
+
   // Code for Limelight Test Autonomous
-    public Command limelightTestAuto(){
-    
- // Basic targeting data
+public Command limelightTestAuto(){ 
+
+        // Basic targeting data
 double tx = LimelightHelpers.getTX("");  // Horizontal offset from crosshair to target in degrees
 double ta = LimelightHelpers.getTA("");  // Target area (0% to 100% of image)
 boolean hasTarget = LimelightHelpers.getTV(""); // Do you have a valid target? 
 
-if (hasTarget){
- // Rotate toward the April Tag
-        return new SequentialCommandGroup(
-            new InstantCommand(() -> m_robotDrive.drive(0, 0, tx * 0.1, false)), // Rotate toward target
-            new WaitCommand(1), // Wait for 1 second
-            new InstantCommand(() -> m_robotDrive.drive(0, 0, 0, false)) // Stop the robot
-        );
-    } else {
-            return new InstantCommand(() -> m_robotDrive.drive(0, 0, 0, false));
-    }
+
  }
+
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
