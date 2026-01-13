@@ -132,10 +132,10 @@ TrajectoryConfig config = new TrajectoryConfig(
 public Command limelightTestAuto(){ 
 
         // Basic targeting data
-double tx = LimelightHelpers.getTX("");  // Horizontal offset from crosshair to target in degrees
-double ta = LimelightHelpers.getTA("");  // Target area (0% to 100% of image)
-boolean hasTarget = LimelightHelpers.getTV(""); // Do you have a valid target? 
-
+// double tx = LimelightHelpers.getTX("");  // Horizontal offset from crosshair to target in degrees
+// double ta = LimelightHelpers.getTA("");  // Target area (0% to 100% of image)
+// boolean hasTarget = LimelightHelpers.getTV(""); // Do you have a valid target? 
+m_robotDrive.drive(1, 0, 0, false); 
 
  }
 
