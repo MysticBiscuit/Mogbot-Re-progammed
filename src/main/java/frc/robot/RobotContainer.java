@@ -136,12 +136,28 @@ public Command limelightTestAuto(){
 // double ta = LimelightHelpers.getTA("");  // Target area (0% to 100% of image)
 boolean hasTarget = LimelightHelpers.getTV(""); // Do you have a valid target? 
 // return new RunCommand(() -> m_robotDrive.drive(1, 0, 0, false), m_robotDrive); // move forward
-
 if (hasTarget == true){ // if an april tag is in view
-    return new RunCommand(() -> m_robotDrive.drive(1, 0, 0, false), m_robotDrive); // move forward
-  } else { // if there is no april tag in view 
-    return new RunCommand(() -> m_robotDrive.drive(0, 0, 0, false), m_robotDrive); // stop robot
+  return new RunCommand(() -> m_robotDrive.drive(1, 0, 0, false), m_robotDrive); // move forward
+} else {
+  return new RunCommand(() -> m_robotDrive.drive(0, 0, 0, false), m_robotDrive); // stop robot
+}
+  /*
+if (hasTarget == true){ // if an april tag is in view
+  if (tx < 0) { 
+    return new RunCommand(() -> m_robotDrive.drive(0, 1, 0, false), m_robotDrive);
+  } else if (tx > 0) {
+    return new RunCommand(() -> m_robotDrive.drive(0, 1, 180, false), m_robotDrive);
+  } else { // when offset is 0:
+    if (ta > 20) {
+      return new RunCommand(() -> m_robotDrive.drive(1, 0, 0, false), m_robotDrive); 
+    } else {
+      return new RunCommand(() -> m_robotDrive.drive(0, 0, 0, false), m_robotDrive); 
+    }
   }
+} else { // if there is no april tag in view 
+    return new RunCommand(() -> m_robotDrive.drive(0, 0, 0, false), m_robotDrive);
+  } 
+*/
 }
 
 
